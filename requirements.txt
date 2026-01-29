@@ -1,0 +1,16 @@
+# Core AI & Agent Framework
+langchain
+langchain-community
+pydantic
+python-dotenv
+
+# Model Providers
+langchain-google-genai
+langchain-openai
+
+# Tools
+duckduckgo-search
+
+# Utilities
+rich
+dateparser
