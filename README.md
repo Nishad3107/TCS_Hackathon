@@ -11,21 +11,29 @@ An intelligent AI-powered CLI application that generates personalized travel iti
 - 💰 **Budget Estimation**: Estimates total trip costs based on your budget level
 - ✅ **Activity Validation**: Optional verification that suggested places actually exist
 - 📄 **Export Options**: Save itineraries as Markdown or PDF files
-- 🎨 **Beautiful CLI**: Rich terminal interface with colors and formatting
+- 🌐 **Beautiful Web Interface**: Modern Streamlit app with animations and gradients ✨ **NEW!**
+- 🎨 **Elegant CLI**: Rich terminal interface with colors and formatting
 - 🔄 **Robust Error Handling**: Graceful handling of API failures and network issues
 
 ## 🏗️ Architecture
 
 ```
-src/
-├── agent.py          # Core TravelAgent class (NLU + Planning)
-├── tools.py          # Search and validation tools
-├── models.py         # LLM factory (Ollama, Gemini, OpenAI)
-├── schemas.py        # Pydantic data models
-├── prompts.py        # LLM prompts for extraction and planning
-├── validation.py     # Activity validation module
-└── utils/
-    └── formatting.py # Markdown and PDF export utilities
+├── app.py                    # 🌐 Streamlit Web Application (NEW!)
+├── main.py                   # 💻 CLI Application
+├── src/
+│   ├── agent.py              # Core TravelAgent class (NLU + Planning)
+│   ├── tools.py              # Search and validation tools
+│   ├── models.py             # LLM factory (Ollama, Gemini, OpenAI)
+│   ├── schemas.py            # Pydantic data models
+│   ├── prompts.py            # LLM prompts for extraction and planning
+│   ├── validation.py         # Activity validation module
+│   └── utils/
+│       └── formatting.py     # Markdown and PDF export utilities
+├── assets/
+│   ├── styles/
+│   │   └── custom.css        # Custom CSS with animations
+│   └── images/               # Image assets
+└── output/                   # Generated itineraries
 ```
 
 ## 🚀 Quick Start
@@ -71,14 +79,36 @@ src/
    MODEL_NAME=llama3
    ```
 
-### Running the Agent
+### Running the Application
 
+**Option 1: Web Interface (Recommended)** 🌐
+```bash
+streamlit run app.py
+```
+Then open your browser to `http://localhost:8501`
+
+**Option 2: Command Line Interface** 💻
 ```bash
 python main.py
 ```
 
 ## 💬 Example Usage
 
+### Web Interface
+1. Open `http://localhost:8501` in your browser
+2. Fill in the beautiful form:
+   - 🗺️ Destination: Tokyo
+   - 📅 Duration: 5 days
+   - 💰 Budget: Medium
+   - 🎨 Interests: Food, Culture
+   - 👥 Travelers: Couple
+3. Click "🚀 Generate Itinerary"
+4. Watch the magic happen with animated progress bars!
+5. Get your beautiful itinerary with day-by-day cards
+6. Optionally validate activities
+7. Download as PDF or Markdown
+
+### CLI Interface
 ```
 Where would you like to go? Plan a 5-day trip to Tokyo for a couple who loves food and culture. Budget is medium.
 
@@ -187,10 +217,13 @@ See `requirements.txt` for the complete list.
   - [x] CLI with Rich
   - [x] Error handling
   - [x] Activity validation
-- [ ] Phase 6: Web UI (Future)
-  - [ ] Streamlit or Flask web interface
-  - [ ] User authentication
-  - [ ] Saved itineraries
+- [x] Phase 6: Web UI ✨ **NEW!**
+  - [x] Streamlit web interface with animations
+  - [x] Beautiful gradient design & custom CSS
+  - [x] Interactive forms & day cards
+  - [x] Export to PDF/Markdown from web
+  - [ ] User authentication (Future)
+  - [ ] Saved itineraries (Future)
 
 ## 🤝 Contributing
 

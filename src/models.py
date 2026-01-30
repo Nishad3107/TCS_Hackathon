@@ -1,8 +1,24 @@
 import os
 from langchain_community.chat_models import ChatOllama
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from langchain_core.language_models.chat_models import BaseChatModel
+
+# Try new Google GenAI SDK first, fallback to LangChain
+try:
+    from google import genai as google_genai
+    USE_NATIVE_GENAI = True
+except ImportError:
+    USE_NATIVE_GENAI = False
+
+try:
+    from langchain_google_genai import ChatGoogleGenerativeAI
+    USE_LANGCHAIN_GENAI = True
+except ImportError:
+    USE_LANGCHAIN_GENAI = False
+
+# Import our native wrapper
+if USE_NATIVE_GENAI:
+    from google_genai_wrapper import NativeGoogleGenAI
 
 class ModelFactory:
     @staticmethod
@@ -20,11 +36,30 @@ class ModelFactory:
             return ChatOllama(model=model_name, base_url=base_url)
         
         elif "gemini" in model_name:
-            # Google Gemini
-            api_key = os.getenv("GOOGLE_API_KEY")
+            # Google Gemini - Try native SDK first
+            api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
             if not api_key:
-                raise ValueError("GOOGLE_API_KEY not found in environment variables.")
-            return ChatGoogleGenerativeAI(model=model_name, google_api_key=api_key)
+                raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY not found in environment variables.")
+            
+            # Prefer native Google GenAI SDK (more compatible with latest API)
+            if USE_NATIVE_GENAI:
+                print(f"Using native Google GenAI SDK for {model_name}")
+                return NativeGoogleGenAI(
+                    model=model_name,
+                    api_key=api_key,
+                    temperature=0.7
+                )
+            # Fallback to LangChain integration
+            elif USE_LANGCHAIN_GENAI:
+                print(f"Using LangChain Google GenAI for {model_name}")
+                return ChatGoogleGenerativeAI(
+                    model=model_name,
+                    google_api_key=api_key,
+                    temperature=0.7,
+                    convert_system_message_to_human=True
+                )
+            else:
+                raise ValueError("No Google GenAI integration available. Install: pip install google-genai")
             
         elif "gpt" in model_name:
             # OpenAI
