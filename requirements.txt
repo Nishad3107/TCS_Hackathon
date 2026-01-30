@@ -14,3 +14,7 @@ duckduckgo-search
 # Utilities
 rich
 dateparser
+
+# Export
+markdown2
+reportlab

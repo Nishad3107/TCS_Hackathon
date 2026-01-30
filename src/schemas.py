@@ -26,3 +26,4 @@ class TravelItinerary(BaseModel):
     request: ItineraryRequest
     days: List[ItineraryDay]
     summary: str
+    total_estimated_cost: Optional[str] = Field(None, description="Estimated total cost for the trip (e.g., '$1500 - $2000').")
