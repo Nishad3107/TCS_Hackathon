@@ -25,6 +25,7 @@ from agent import TravelAgent
 from schemas import ItineraryRequest, TravelItinerary
 from utils.formatting import format_itinerary_to_markdown, export_to_pdf
 from validation import validate_itinerary_activities, format_validation_report
+from image_service import get_destination_hero_image, get_activity_image
 
 # Page Configuration
 st.set_page_config(
@@ -270,6 +271,14 @@ def display_itinerary(itinerary: TravelItinerary):
     
     st.markdown("---")
     
+    # Destination Hero Image (smaller, centered)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        hero_image = get_destination_hero_image(itinerary.request.destination)
+        st.image(hero_image, caption=f"📍 {itinerary.request.destination}", use_container_width=True)
+    
+    st.markdown("---")
+    
     # Overview
     with st.expander("📋 Trip Overview", expanded=True):
         st.markdown(f"**Summary:** {itinerary.summary}")
@@ -295,6 +304,12 @@ def display_itinerary(itinerary: TravelItinerary):
                 </div>
                 <p style="color: #90caf9; margin-bottom: 1.5rem;">📆 {day.date}</p>
             """, unsafe_allow_html=True)
+            
+            # Get image for the day's main activity (smaller, in columns)
+            img_col1, img_col2 = st.columns([1, 2])
+            with img_col1:
+                day_image = get_activity_image(day.morning_activity, itinerary.request.destination)
+                st.image(day_image, caption=f"Day {day.day_number}", use_container_width=True)
             
             # Morning
             st.markdown('<div style="font-weight: 600; color: #64b5f6; margin-top: 1rem;">☀️ MORNING</div>', unsafe_allow_html=True)
@@ -401,7 +416,7 @@ def main():
                 🌍 AI-Powered Travel Planning | <span style="color: #64b5f6;">About • Privacy • Terms • Contact</span>
             </div>
             <div style="color: #64b5f6; font-size: 0.9rem;">
-                ✨ Powered by Gemini AI
+                ✨ Powered by AI
             </div>
         </div>
     </div>
